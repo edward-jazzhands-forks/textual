@@ -1083,6 +1083,25 @@ class DataTable(ScrollView, Generic[CellType], can_focus=True):
             raise ColumnDoesNotExist(f"No column exists for column_key={column_key!r}")
         return self._column_locations.get(column_key)
 
+    def get_column_object(self, column_key: ColumnKey | str) -> Column:
+        """Return the column object for the column identified by column_key.
+        
+        Args:
+            column_key: The key of the column to retrieve.
+
+        Returns:
+            The `Column` object corresponding to the specified column key.
+
+        Raises:
+            ColumnDoesNotExist: If the column key does not exist.
+        """
+
+        if column_key not in self._column_locations:
+            raise ColumnDoesNotExist(f"No column exists for column_key={column_key!r}")
+
+        column_index = self.get_column_index(column_key)
+        return self.ordered_columns[column_index]
+
     def _clear_caches(self) -> None:
         self._row_render_cache.clear()
         self._cell_render_cache.clear()
