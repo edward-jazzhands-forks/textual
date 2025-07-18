@@ -1098,9 +1098,9 @@ class DataTable(ScrollView, Generic[CellType], can_focus=True):
 
         if column_key not in self._column_locations:
             raise ColumnDoesNotExist(f"No column exists for column_key={column_key!r}")
-
-        column_index = self.get_column_index(column_key)
-        return self.ordered_columns[column_index]
+        if isinstance(column_key, str):
+            column_key = ColumnKey(column_key)
+        return self.columns[column_key]
 
     def _clear_caches(self) -> None:
         self._row_render_cache.clear()
